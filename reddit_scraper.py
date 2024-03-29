@@ -32,8 +32,8 @@ for submission in subreddit.new(limit=None):  # Adjust limit as necessary
 posts_df = pd.DataFrame(posts_data)
 
 # Reorder the DataFrame columns to move 'title' to the last position
-columns_order = [col for col in posts_df.columns if col != 'title'] + ['title']
-posts_df = posts_df[columns_order]
+# columns_order = [col for col in posts_df.columns if col != 'title'] + ['title']
+# posts_df = posts_df[columns_order]
 
 # print(posts_df.head())
 # posts_df.to_csv('watchHistory.csv')
@@ -41,8 +41,9 @@ def find_brand(title):
     for brand in watch_brands:
         if brand.lower() in title.lower():
             return brand
-    return None  # Or "Unknown" if you prefer
-
-# Create a new 'brand' column by applying the find_brand function to each title
+    return None  
 posts_df['brand'] = posts_df['title'].apply(find_brand)
+columns_order = ['id', 'created_utc', 'username', 'num_comments', 'upvotes', 'brand', 'title']
+posts_df = posts_df[columns_order]
 print(posts_df.head())
+posts_df.to_csv('watchHistory.csv')
