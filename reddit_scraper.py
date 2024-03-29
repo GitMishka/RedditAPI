@@ -33,3 +33,4 @@ posts_df = pd.DataFrame(posts_data)
 
 #Display the first few rows of the DataFrame
 print(posts_df.head()) 
+posts_df.to_csv('watchHistory.csv')
