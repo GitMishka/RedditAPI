@@ -46,4 +46,4 @@ posts_df['brand'] = posts_df['title'].apply(find_brand)
 columns_order = ['id', 'created_utc', 'username', 'num_comments', 'upvotes', 'brand', 'title']
 posts_df = posts_df[columns_order]
 print(posts_df.head())
-posts_df.to_csv('watchHistory.csv')
+#posts_df.to_csv('watchHistory.csv')

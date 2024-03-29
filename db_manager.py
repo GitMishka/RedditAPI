@@ -1,30 +1,16 @@
-import psycopg2
-from config import pg_host, pg_database, pg_user, pg_password
+from sqlalchemy import create_engine
 import pandas as pd
+from config import pg_host, pg_database, pg_user, pg_password
 from reddit_scraper import posts_df
 
-# Database connection
-conn = psycopg2.connect(
-    dbname=pg_database,
-    user=pg_user,
-    password=pg_password,
-    host=pg_host
-)
-cur = conn.cursor()
 
-# Insert data into the table from reddit_scrapper.py
-insert_query = """
-INSERT INTO reddit_watches (id, created_utc, title, username, num_comments, upvotes)
-VALUES (%s, %s, %s, %s, %s, %s)
-ON CONFLICT (id) DO NOTHING;
-"""
+# PostgreSQL connection string using variables from config.py
+connection_string = f"postgresql://{pg_user}:{pg_password}@{pg_host}/{pg_database}"
 
-for _, row in posts_df.iterrows():
-    cur.execute(insert_query, (row["id"], row["created_utc"], row["title"], row["username"], row["num_comments"], row["upvotes"]))
+# Create an SQLAlchemy engine
+engine = create_engine(connection_string)
 
-conn.commit()
+# Insert the DataFrame into the database
+posts_df.to_sql('reddit_watches', con=engine, index=False, if_exists='replace')
 
-cur.close()
-conn.close()
 
-print("Data inserted successfully.")
