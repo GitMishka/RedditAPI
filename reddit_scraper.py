@@ -1,7 +1,7 @@
 import praw
 import config
 import pandas as pd
-
+from datetime import datetime
 #credentials from config
 reddit = praw.Reddit(
     client_id=config.reddit_client_id,
@@ -13,24 +13,26 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit("watches")
 
-#empty list
 posts_data = []
 
-#Fetch entire history of r/watches
-for submission in subreddit.new(limit=None):  #Remove 'limit=None' 
+for submission in subreddit.new(limit=None):  # Adjust limit as necessary
     post_details = {
         "id": submission.id,
-        "created_utc": submission.created_utc,
-        "title": submission.title,
-        "username": submission.author.name if submission.author else None,
+        "created_utc": datetime.utcfromtimestamp(submission.created_utc).strftime('%Y-%m-%d %H:%M:%S'),  #UTC format
+        
+        "username": submission.author.name if submission.author else "N/A",
         "num_comments": submission.num_comments,
         "upvotes": submission.score,
+        "title": submission.title, 
     }
     posts_data.append(post_details)
 
-#Create a DataFrame from the collected data
+# Convert list of posts into a DataFrame
 posts_df = pd.DataFrame(posts_data)
 
-#Display the first few rows of the DataFrame
-print(posts_df.head()) 
+# Reorder the DataFrame columns to move 'title' to the last position
+columns_order = [col for col in posts_df.columns if col != 'title'] + ['title']
+posts_df = posts_df[columns_order]
+
+print(posts_df.head())
 posts_df.to_csv('watchHistory.csv')
