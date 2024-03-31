@@ -1,7 +1,6 @@
 import psycopg2
 from config import pg_host, pg_database, pg_user, pg_password
 
-#SQL statement for creating a table
 create_table_query = """
 CREATE TABLE IF NOT EXISTS reddit_watches (
     id VARCHAR(20) PRIMARY KEY,
@@ -14,7 +13,6 @@ CREATE TABLE IF NOT EXISTS reddit_watches (
 """
 
 try:
-    # Connect to your database using credentials from config.py
     conn = psycopg2.connect(
         dbname=pg_database,
         user=pg_user,
@@ -22,16 +20,12 @@ try:
         host=pg_host
     )
 
-    # Create a cursor object
     cur = conn.cursor()
 
-    # Execute the SQL statement
     cur.execute(create_table_query)
 
-    # Commit the changes to the database
     conn.commit()
 
-    # Close the cursor and connection
     cur.close()
     conn.close()
 
