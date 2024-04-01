@@ -10,7 +10,7 @@ def run_scrapper():
     reddit = praw.Reddit(
         client_id=reddit_client_id,
         client_secret=reddit_client_secret,
-        user_agent=f"script:r/watches data collection:v1.0 (by u/{reddit_username})",
+        user_agent=reddit_user_agent,
         username=reddit_username,
         password=reddit_password,
     )
