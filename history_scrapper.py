@@ -28,7 +28,6 @@ for submission in subreddit.new(limit=None):  # Adjust limit as necessary
     }
     posts_data.append(post_details)
 
-# Convert list of posts into a DataFrame
 posts_df = pd.DataFrame(posts_data)
 
 # Reorder the DataFrame columns to move 'title' to the last position
